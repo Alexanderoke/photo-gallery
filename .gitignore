@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+backend/venv/
+venv/
+.venv/
+env/
+.env/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Django local data
+backend/db.sqlite3
+backend/db.sqlite3-journal
+backend/media/
+media/
+
+# Logs and test/build outputs
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# JavaScript dependencies/build output (if a frontend is added)
+node_modules/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
