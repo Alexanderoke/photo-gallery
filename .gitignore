@@ -32,6 +32,8 @@ dist/
 
 # JavaScript dependencies/build output (if a frontend is added)
 node_modules/
+dist-ssr/
+*.local
 
 # Editors and operating systems
 .vscode/
