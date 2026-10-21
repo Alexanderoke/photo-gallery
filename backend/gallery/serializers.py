@@ -1,5 +1,5 @@
-from rest_framwork import serializers
-from .models import photo
+from rest_framework import serializers
+from .models import Photo
 
 class PhotoSerializer(serializers.ModelSerializer):
   image=serializers.ImageField(required=False)
@@ -11,5 +11,6 @@ class PhotoSerializer(serializers.ModelSerializer):
 
 
   def validate(self, attrs):
-    if self.instance is None and "image" is not in attrs:
+    if self.instance is None and "image" not in attrs:
       raise serializers.ValidationError({"image": "Please chose a photo to upload."})
+    return attrs

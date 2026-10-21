@@ -1,4 +1,4 @@
-from rest_frameworks.routers import DefaultRouter
+from rest_framework.routers import DefaultRouter
 from .views import PhotoViewSet
 
 router = DefaultRouter()

@@ -118,10 +118,10 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 REST_FRAMEWORK ={
-    "DEFAULT_PERMISION_CLASSES": ["rest_framework.permissions.AllowAny"],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
     "DEFAULT_PARSER_CLASSES":[
         "rest_framework.parsers.JSONParser",
-        "rest_framework.parsers.MultipartParser",
+        "rest_framework.parsers.MultiPartParser",
         "rest_framework.parsers.FormParser",
     ],
 }
