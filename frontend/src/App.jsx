@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { listPhotos, createPhoto, updatePhoto, deletePhoto } from './api.js';
 import PhotoCard from "./components/PhotoCard.jsx"
 import PhotoForm from "./components/PhotoForm.jsx"
@@ -7,119 +7,98 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App (){
+  const [photos, setPhotos] = useState([]);
+  const [loading,setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [editing, setEditing] = useState(null);
+  const [viewing, setViewing] = useState(null);
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+async function load() {
+  try {
+    setError("");
+    setPhotos(await listPhotos());
+  } catch {
+    setError("could not reach the backend. Is Django running on port 8000?");
+  } finally {
+    setLoading(false);
+  }
 }
 
-export default App
+useEffect(() => {
+  load();
+}, []);
+
+async function handleSave(formData) {
+  if (editing && editing.id){
+    await updatePhoto(editing.id, formData);
+  }else {
+    await createPhoto(formData);
+  }
+  setEditing(null);
+  await load();  
+}
+
+async function handleDelete(photo) {
+  if (!window.confirm(`Delete "${photo.title}"?`)) return;
+  try {
+    await deletePhoto(photo.id);
+    setPhotos((prev) => prev.filter((p) => p.id !== photo.id));
+  }catch (e) {
+    setError(e.message);
+  }
+}
+
+return (
+  <div className="app">
+    <header className = "top">
+      <h1>Photo Gallery</h1>
+      {/*{} as the editing value means "open the form to add a new photo"*/}
+      <button className= "btn primary" onClick={() => setEditing({})}>
+        + Add photo
+      </button>
+    </header>
+
+    {/* "a && b" shows b only when a is true */}
+    {error && <p className= "error">{error}</p>}
+    {loading && <p className= "muted">Loading</p>}
+
+    {!loading && !error && photos.length === 0 && (
+      <p className= "muted empty">No photos yet. Click "Add photo" to upload your first one.</p>
+    )}
+
+    <div className="grid">
+      {/* .map turns each photo into a card. "key" lets React track items.*/}
+      {photos.map((photo) =>(
+        <PhotoCard
+        key ={photo.id}
+        photo={photo}
+        onView={() => setViewing(photo)}
+        onEdit={() => setEditing(photo)}
+        onDelete={() => handleDelete(photo)}
+        />
+      ))}
+    </div>
+
+    {editing && (
+      <PhotoForm
+      photo= {editing.id ? editing: null}
+      onSave ={handleSave}
+      onCancel ={() => setEditing(null)}
+      />
+    )}
+
+    {viewing && (
+      <div className="overlay" onClick={() => setViewing(null)}>
+        <figure className="lightbox" onClick={(e) => e.stopPropagation()}>
+          <img src={viewing.image} alt={viewing.title}/>
+          <figcaption>
+            <strong>{viewing.title}</strong>
+            {viewing.description && <p>{viewing.description}</p>}
+          </figcaption>
+        </figure>
+      </div>
+    )}
+  </div>
+);
+}
