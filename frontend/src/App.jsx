@@ -2,9 +2,6 @@ import { useEffect, useState } from 'react'
 import { listPhotos, createPhoto, updatePhoto, deletePhoto } from './api.js';
 import PhotoCard from "./components/PhotoCard.jsx"
 import PhotoForm from "./components/PhotoForm.jsx"
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
 import './App.css'
 
 export default function App (){
@@ -16,8 +13,9 @@ export default function App (){
 
 async function load() {
   try {
+    const loadedPhotos = await listPhotos();
     setError("");
-    setPhotos(await listPhotos());
+    setPhotos(loadedPhotos);
   } catch {
     setError("could not reach the backend. Is Django running on port 8000?");
   } finally {
@@ -26,7 +24,24 @@ async function load() {
 }
 
 useEffect(() => {
-  load();
+  let active = true;
+  listPhotos()
+    .then((loadedPhotos) => {
+      if (!active) return;
+      setError("");
+      setPhotos(loadedPhotos);
+    })
+    .catch(() => {
+      if (active) {
+        setError("could not reach the backend. Is Django running on port 8000?");
+      }
+    })
+    .finally(() => {
+      if (active) setLoading(false);
+    });
+  return () => {
+    active = false;
+  };
 }, []);
 
 async function handleSave(formData) {

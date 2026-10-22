@@ -9,7 +9,7 @@ async function handle(res) {
     .map(([field, msgs]) =>`${field}: ${[].concat(msgs).join("")}`)
     .join("\n");
   }catch {
-    
+    // Keep the status-based message when the response body isn't JSON.
   }
   throw new Error(message);
     
@@ -23,4 +23,4 @@ export const updatePhoto = (id, formData) =>
   fetch(`${BASE}${id}/`, {method: "PATCH", body: formData}).then(handle);
 
 export const deletePhoto = (id) =>
-  fetch(`${BASE}${id}`, {method: "DELETE"}).then(handle);
+  fetch(`${BASE}${id}/`, {method: "DELETE"}).then(handle);

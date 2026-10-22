@@ -36,7 +36,7 @@ export default function PhotoForm({photo, onSave, onCancel}) {
         <h2>{photo ? "Edit photo" : "Add photo"}</h2>
 
 
-        {preview && <img className={preview} alt="Preview" />}
+        {preview && <img className="preview" src={preview} alt="Preview" />}
 
         <label>
           photo {photo && <span className="muted">(leave empty to keep current)</span>}

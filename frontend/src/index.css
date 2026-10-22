@@ -118,6 +118,12 @@ body {
   cursor: default;
 }
 
+.btn.danger:hover {
+  background: #000;
+  color: #fff;
+  opacity: 1;
+}
+
 .overlay{
   position:fixed;
   inset: 0;

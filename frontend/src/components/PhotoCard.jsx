@@ -3,7 +3,7 @@
 export default function PhotoCard({photo, onView, onEdit, onDelete}) {
   return(
     <article className="card">
-      <img src={photo.imge} alt={photo.title} onClick={onView} loading="lazy"/>
+      <img src={photo.image} alt={photo.title} onClick={onView} loading="lazy"/>
       <div className="card-body">
         <h3>{photo.title}</h3>
         {photo.description && <p>{photo.description}</p>}
