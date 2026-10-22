@@ -1,0 +1,188 @@
+*{
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background: #f4f5f7;
+  color: #1c1e21;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0auto;
+  padding: 20px 16px 60px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.top h1{
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.empty {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.error {
+  color: #b42318;
+  background: #fee4e2;
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: pre-line;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.card{
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0 green,0 blue,0.08 alpha);
+  display: flex;
+  flex-direction: column;
+}
+
+.card img{
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  cursor: zoom-in;
+  display: block;
+}
+
+.card-body{
+  padding: 12px;
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.card-body h3{
+  margin: 0;
+  font-size: 1rem;
+}
+.card-body p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.actions.end {
+  justify-content: flex-end;
+}
+
+.btn {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn:hover {
+  background: #f3f3;
+}
+
+.btn.primary {
+  background: #2563eb;
+  border-color: #2536eb;
+  color: #fff;
+}
+.btn.primary:hover{
+  background: #4b5563;
+
+}
+.btn.danger{
+  opacity: 0.6;
+  cursor: default;
+}
+
+.overlay{
+  position:fixed;
+  inset: 0;
+  background: rgb(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 10;
+}
+
+.modal{
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  width: 100%;
+  max-width: 440px;
+  max-height: 92vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal h2{
+  margin: 0;
+}
+
+.modal label{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.modal input,
+.modal textarea{
+  font: inherit;
+  font-weight: 400;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+.preview {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.lightbox img{
+  width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+  background: #111;
+  display: block;
+}
+
+.lightbox figcaption{
+  padding: 12px 16px;
+}
+
+.lightbox p{
+  margin: 6px 0 0;
+  color: #4b5563;
+}
