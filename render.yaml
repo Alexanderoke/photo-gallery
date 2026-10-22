@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: photo-gallery-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: gunicorn config.wsgi:application
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: photo-gallery-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: CLOUDINARY_URL
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://${{photo-gallery-frontend.host}}
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://${{photo-gallery-frontend.host}}
+  - type: static
+    name: photo-gallery-frontend
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://${{photo-gallery-api.host}}/api/photos/
+
+databases:
+  - name: photo-gallery-db
+    databaseName: photo_gallery
+    user: photo_gallery

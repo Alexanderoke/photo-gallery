@@ -1,4 +1,6 @@
-const BASE = "http://127.0.0.1:8000/api/photos/";
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/photos/";
+const BASE = `${API_URL.replace(/\/+$/, "")}/`;
 
 async function handle(res) {
   if (res.ok) return res.status ===204 ? null : res.json();
