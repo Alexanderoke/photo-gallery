@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { listPhotos, createPhoto, updatePhoto, deletePhoto } from './api.js';
+import PhotoCard from "./components/PhotoCard.jsx"
+import PhotoForm from "./components/PhotoForm.jsx"
 import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
